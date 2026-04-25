@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="割り勘" />
+  <title>割り勘アプリ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f0e17;
+      --surface: #1a1828;
+      --surface2: #231f35;
+      --accent: #ff6b35;
+      --accent2: #ffd166;
+      --text: #fffffe;
+      --muted: #a7a9be;
+      --border: #2e2a45;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+```
+/* ── Header ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 20px 16px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  background: none; border: none; color: var(--accent);
+  font-size: 26px; cursor: pointer; padding: 0 4px;
+  display: none; line-height: 1;
+}
+.header-titles { flex: 1; }
+header h1 { font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+header h2 { font-size: 20px; font-weight: 900; color: var(--text); margin-top: 2px; }
+header h2 span { color: var(--accent); }
+
+/* ── Nav ── */
+nav {
+  display: none;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 68px; z-index: 99;
+}
+nav.visible { display: flex; }
+nav button {
+  flex: 1; background: none; border: none;
+  color: var(--muted); font-family: inherit;
+  font-size: 13px; font-weight: 700;
+  padding: 12px 8px; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s; letter-spacing: 0.05em;
+}
+nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Screens / Pages ── */
+.screen { display: none; }
+.screen.active { display: block; }
+.page { display: none; padding: 20px; padding-bottom: 60px; }
+.page.active { display: block; }
+
+/* ── Card ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+.card-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* ── Input ── */
+input[type="text"], input[type="number"], select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+input:focus, select:focus { border-color: var(--accent); }
+input::placeholder { color: var(--muted); }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 10px;
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  padding: 13px 18px; cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  width: 100%; margin-top: 10px;
+}
+.btn:active { opacity: 0.8; transform: scale(0.98); }
+.btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn.danger { background: #e63946; }
+.btn.small { padding: 7px 12px; font-size: 12px; width: auto; margin-top: 0; }
+
+/* ── Group list ── */
+#screen-home { padding: 20px; padding-bottom: 60px; }
+.group-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.1s;
+  position: relative;
+}
+.group-card:active { transform: scale(0.98); border-color: var(--accent); }
+.group-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.group-info { flex: 1; min-width: 0; }
+.group-name { font-size: 16px; font-weight: 900; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.group-meta { font-size: 12px; color: var(--muted); }
+.group-arrow { color: var(--muted); font-size: 20px; margin-right: 8px; }
+.group-delete {
+  background: none; border: none; color: var(--muted);
+  font-size: 16px; cursor: pointer; padding: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Member rows ── */
+.member-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.member-row:last-child { border-bottom: none; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; flex-shrink: 0; }
+.member-name { flex: 1; font-size: 15px; font-weight: 700; }
+.delete-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px; }
+
+/* ── Expense rows ── */
+.expense-row { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.expense-row:last-child { border-bottom: none; }
+.expense-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.expense-name { font-size: 15px; font-weight: 700; }
+.expense-amount { font-family: 'DM Mono', monospace; font-size: 16px; color: var(--accent2); font-weight: 500; }
+.expense-meta { font-size: 12px; color: var(--muted); }
+.expense-actions { display: flex; gap: 6px; margin-top: 8px; }
+.payer-badge { display: inline-block; background: var(--accent2); color: var(--bg); border-radius: 6px; font-size: 11px; font-weight: 700; padding: 2px 7px; margin-left: 6px; }
+
+/* ── Result ── */
+.result-summary { background: linear-gradient(135deg, var(--accent), #ff8c5a); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; text-align: center; }
+.result-summary .label { font-size: 12px; opacity: 0.8; letter-spacing: 0.1em; margin-bottom: 4px; }
+.result-summary .big { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; }
+.result-row { display: flex; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+.result-row:last-child { border-bottom: none; }
+.result-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; flex-shrink: 0; }
+.result-info { flex: 1; }
+.result-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.result-detail { font-size: 12px; color: var(--muted); }
+.result-amount { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; text-align: right; }
+.result-amount.surplus { color: #06d6a0; }
+.result-amount.deficit { color: #ef476f; }
+.result-amount.even { color: var(--muted); }
+.transfer-card { background: var(--surface2); border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.transfer-arrow { color: var(--accent); font-size: 18px; }
+.transfer-text { flex: 1; font-size: 13px; line-height: 1.5; }
+.transfer-amount { font-family: 'DM Mono', monospace; font-size: 15px; color: var(--accent2); }
+
+/* ── Modal ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: flex-end; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: 24px 24px 0 0; padding: 24px 20px 40px; width: 100%; border-top: 1px solid var(--border); animation: slideUp 0.25s ease; max-height: 90dvh; overflow-y: auto; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-size: 18px; font-weight: 900; margin-bottom: 16px; }
+.modal-row { margin-bottom: 12px; }
+.modal-row label { display: block; font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px; text-transform: uppercase; }
+
+/* ── Checkbox ── */
+.check-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.check-item input[type="checkbox"] { display: none; }
+.check-item label { display: inline-block; padding: 7px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+.check-item input:checked + label { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.empty-state { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14px; line-height: 1.8; }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+.emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.emoji-btn { background: var(--surface2); border: 2px solid transparent; border-radius: 10px; font-size: 22px; padding: 8px 12px; cursor: pointer; transition: all 0.15s; }
+.emoji-btn.selected { border-color: var(--accent); background: #ff6b3520; }
+```
+
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="back-btn" id="back-btn" onclick="goHome()">‹</button>
+  <div class="header-titles">
+    <h1 id="header-sub">MY GROUPS</h1>
+    <h2 id="header-title">割り勘<span>アプリ</span></h2>
+  </div>
+</header>
+
+<nav id="main-nav">
+  <button class="active" onclick="switchTab(event,'members')">👥 メンバー</button>
+  <button onclick="switchTab(event,'expenses')">🧾 支出</button>
+  <button onclick="switchTab(event,'result')">💰 精算</button>
+</nav>
+
+<!-- HOME -->
+
+<div id="screen-home" class="screen active">
+  <button class="btn" style="margin-bottom:20px;" onclick="openNewGroupModal()">＋ 新規グループを作成</button>
+  <div id="group-list"></div>
+</div>
+
+<!-- GROUP -->
+
+<div id="screen-group" class="screen">
+  <div id="page-members" class="page active">
+    <div class="card">
+      <div class="card-label">メンバーを追加</div>
+      <input type="text" id="member-input" placeholder="名前を入力" maxlength="20" />
+      <button class="btn" onclick="addMember()">＋ 追加</button>
+    </div>
+    <div class="card">
+      <div class="card-label">参加者一覧</div>
+      <div id="member-list"></div>
+    </div>
+  </div>
+
+  <div id="page-expenses" class="page">
+    <button class="btn" onclick="openExpenseModal(null)">＋ 支出を追加</button>
+    <div class="card" style="margin-top:16px;">
+      <div class="card-label">支出一覧</div>
+      <div id="expense-list"></div>
+    </div>
+  </div>
+
+  <div id="page-result" class="page">
+    <div id="result-content"></div>
+  </div>
+</div>
+
+<!-- MODAL: グループ作成 -->
+
+<div class="modal-overlay" id="modal-group">
+  <div class="modal">
+    <div class="modal-title">グループを作成</div>
+    <div class="modal-row">
+      <label>グループ名</label>
+      <input type="text" id="group-name-input" placeholder="例：沖縄旅行2025" maxlength="30" />
+    </div>
+    <div class="modal-row">
+      <label>アイコン</label>
+      <div class="emoji-grid" id="emoji-grid"></div>
+    </div>
+    <button class="btn" onclick="saveNewGroup()">作成する</button>
+    <button class="btn secondary" onclick="closeModal('modal-group')">キャンセル</button>
+  </div>
+</div>
+
+<!-- MODAL: 支出 -->
+
+<div class="modal-overlay" id="modal-expense">
+  <div class="modal">
+    <div class="modal-title" id="exp-modal-title">支出を追加</div>
+    <div class="modal-row">
+      <label>品名</label>
+      <input type="text" id="exp-name" placeholder="例：居酒屋代" maxlength="30" />
+    </div>
+    <div class="modal-row">
+      <label>金額（円）</label>
+      <input type="number" id="exp-amount" placeholder="0" min="1" />
+    </div>
+    <div class="modal-row">
+      <label>支払い者</label>
+      <select id="exp-payer"></select>
+    </div>
+    <div class="modal-row">
+      <label>割り勘対象メンバー</label>
+      <div class="check-list" id="exp-members"></div>
+    </div>
+    <button class="btn" onclick="saveExpense()">保存する</button>
+    <button class="btn secondary" onclick="closeModal('modal-expense')">キャンセル</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'warikan_v2';
+const EMOJIS = ['🍺','🍣','🍕','🚗','🏨','🎉','⛷️','🏝️','🎮','🛒','☕','🎤','🏕️','🎂','✈️','🚢'];
+
+let appData = { groups: [] };
+let currentGroupId = null;
+let editingExpenseId = null;
+let selectedEmoji = EMOJIS[0];
+
+function load() {
+  try { appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { groups: [] }; } catch { appData = { groups: [] }; }
+}
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+function genId() { return Math.random().toString(36).slice(2, 9); }
+function currentGroup() { return appData.groups.find(g => g.id === currentGroupId); }
+
+// ── Home ──
+function renderHome() {
+  const el = document.getElementById('group-list');
+  if (!appData.groups.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">🗂</div>グループがまだありません<br>上のボタンから作成しましょう</div>';
+    return;
+  }
+  el.innerHTML = appData.groups.map(g => {
+    const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+    return `
+      <div class="group-card" onclick="openGroup('${g.id}')">
+        <div class="group-icon">${g.emoji}</div>
+        <div class="group-info">
+          <div class="group-name">${g.name}</div>
+          <div class="group-meta">${g.members.length}人 ・ 合計 ¥${total.toLocaleString()}</div>
+        </div>
+        <div class="group-arrow">›</div>
+        <button class="group-delete" onclick="deleteGroup(event,'${g.id}')">✕</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function openGroup(id) {
+  currentGroupId = id;
+  const g = currentGroup();
+  document.getElementById('header-sub').textContent = 'GROUP';
+  document.getElementById('header-title').textContent = g.name;
+  document.getElementById('back-btn').style.display = 'block';
+  document.getElementById('main-nav').classList.add('visible');
+  document.getElementById('screen-home').classList.remove('active');
+  document.getElementById('screen-group').classList.add('active');
+  // reset to members tab
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-members').classList.add('active');
+  document.querySelector('nav button').classList.add('active');
+  renderMembers();
+  renderExpenses();
+}
+
+function goHome() {
+  currentGroupId = null;
+  document.getElementById('header-sub').textContent = 'MY GROUPS';
+  document.getElementById('header-title').innerHTML = '割り勘<span style="color:var(--accent)">アプリ</span>';
+  document.getElementById('back-btn').style.display = 'none';
+  document.getElementById('main-nav').classList.remove('visible');
+  document.getElementById('screen-group').classList.remove('active');
+  document.getElementById('screen-home').classList.add('active');
+  renderHome();
+}
+
+function deleteGroup(e, id) {
+  e.stopPropagation();
+  if (!confirm('このグループを削除しますか？')) return;
+  appData.groups = appData.groups.filter(g => g.id !== id);
+  save(); renderHome();
+}
+
+// ── New Group ──
+function openNewGroupModal() {
+  selectedEmoji = EMOJIS[0];
+  document.getElementById('group-name-input').value = '';
+  document.getElementById('emoji-grid').innerHTML = EMOJIS.map((em, i) =>
+    `<button class="emoji-btn${i===0?' selected':''}" onclick="selectEmoji(this,'${em}')">${em}</button>`
+  ).join('');
+  openModal('modal-group');
+}
+function selectEmoji(btn, em) {
+  document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedEmoji = em;
+}
+function saveNewGroup() {
+  const name = document.getElementById('group-name-input').value.trim();
+  if (!name) return alert('グループ名を入力してください');
+  const g = { id: genId(), name, emoji: selectedEmoji, members: [], expenses: [] };
+  appData.groups.push(g);
+  save(); closeModal('modal-group');
+  openGroup(g.id);
+}
+
+// ── Tab ──
+function switchTab(e, tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  e.target.classList.add('active');
+  if (tab === 'result') renderResult();
+}
+
+// ── Members ──
+function addMember() {
+  const input = document.getElementById('member-input');
+  const name = input.value.trim();
+  if (!name) return;
+  const g = currentGroup();
+  if (g.members.find(m => m.name === name)) return alert('同じ名前のメンバーが既にいます');
+  g.members.push({ id: genId(), name });
+  input.value = '';
+  save(); renderMembers();
+}
+document.getElementById('member-input').addEventListener('keydown', e => { if (e.key === 'Enter') addMember(); });
+
+function deleteMember(id) {
+  if (!confirm('このメンバーを削除しますか？')) return;
+  const g = currentGroup();
+  g.members = g.members.filter(m => m.id !== id);
+  g.expenses = g.expenses
+    .map(e => ({ ...e, memberIds: e.memberIds.filter(mid => mid !== id) }))
+    .filter(e => e.payerId !== id);
+  save(); renderMembers(); renderExpenses();
+}
+
+function renderMembers() {
+  const g = currentGroup();
+  const el = document.getElementById('member-list');
+  if (!g.members.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">👤</div>まだメンバーがいません</div>';
+    return;
+  }
+  el.innerHTML = g.members.map(m => `
+    <div class="member-row">
+      <div class="avatar">${m.name[0]}</div>
+      <div class="member-name">${m.name}</div>
+      <button class="delete-btn" onclick="deleteMember('${m.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+// ── Expenses ──
+function openExpenseModal(id) {
+  const g = currentGroup();
+  if (!g.members.length) return alert('先にメンバーを追加してください');
+  editingExpenseId = id || null;
+  const exp = id ? g.expenses.find(e => e.id === id) : null;
+  document.getElementById('exp-modal-title').textContent = id ? '支出を編集' : '支出を追加';
+  document.getElementById('exp-name').value = exp ? exp.name : '';
+  document.getElementById('exp-amount').value = exp ? exp.amount : '';
+  document.getElementById('exp-payer').innerHTML = g.members.map(m =>
+    `<option value="${m.id}" ${exp && exp.payerId === m.id ? 'selected' : ''}>${m.name}</option>`
+  ).join('');
+  document.getElementById('exp-members').innerHTML = g.members.map(m => `
+    <div class="check-item">
+      <input type="checkbox" id="chk-${m.id}" value="${m.id}" ${!exp || exp.memberIds.includes(m.id) ? 'checked' : ''} />
+      <label for="chk-${m.id}">${m.name}</label>
+    </div>
+  `).join('');
+  openModal('modal-expense');
+}
+
+function saveExpense() {
+  const g = currentGroup();
+  const name = document.getElementById('exp-name').value.trim();
+  const amount = parseInt(document.getElementById('exp-amount').value);
+  const payerId = document.getElementById('exp-payer').value;
+  const memberIds = [...document.querySelectorAll('#exp-members input:checked')].map(c => c.value);
+  if (!name) return alert('品名を入力してください');
+  if (!amount || amount <= 0) return alert('金額を入力してください');
+  if (!memberIds.length) return alert('対象メンバーを選んでください');
+  if (editingExpenseId) {
+    const idx = g.expenses.findIndex(e => e.id === editingExpenseId);
+    g.expenses[idx] = { id: editingExpenseId, name, amount, payerId, memberIds };
+  } else {
+    g.expenses.push({ id: genId(), name, amount, payerId, memberIds });
+  }
+  save(); closeModal('modal-expense'); renderExpenses();
+}
+
+function deleteExpense(id) {
+  if (!confirm('この支出を削除しますか？')) return;
+  const g = currentGroup();
+  g.expenses = g.expenses.filter(e => e.id !== id);
+  save(); renderExpenses();
+}
+
+function renderExpenses() {
+  const g = currentGroup();
+  const el = document.getElementById('expense-list');
+  if (!g.expenses.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">🧾</div>まだ支出がありません</div>';
+    return;
+  }
+  el.innerHTML = g.expenses.map(exp => {
+    const payer = g.members.find(m => m.id === exp.payerId);
+    const targets = exp.memberIds.map(id => g.members.find(m => m.id === id)?.name).filter(Boolean).join('・');
+    return `
+      <div class="expense-row">
+        <div class="expense-top">
+          <div class="expense-name">${exp.name}</div>
+          <div class="expense-amount">¥${exp.amount.toLocaleString()}</div>
+        </div>
+        <div class="expense-meta">支払い：${payer?.name ?? '?'} <span class="payer-badge">支払済</span></div>
+        <div class="expense-meta" style="margin-top:2px;">対象：${targets}</div>
+        <div class="expense-actions">
+          <button class="btn secondary small" onclick="openExpenseModal('${exp.id}')">✏️ 編集</button>
+          <button class="btn danger small" onclick="deleteExpense('${exp.id}')">🗑 削除</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Result ──
+function renderResult() {
+  const g = currentGroup();
+  const el = document.getElementById('result-content');
+  if (!g.members.length || !g.expenses.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div>メンバーと支出を追加すると<br>精算結果が表示されます</div>';
+    return;
+  }
+
+  const paid = {}, shouldPay = {};
+  g.members.forEach(m => { paid[m.id] = 0; shouldPay[m.id] = 0; });
+
+  g.expenses.forEach(exp => {
+    if (paid[exp.payerId] !== undefined) paid[exp.payerId] += exp.amount;
+    const count = exp.memberIds.length;
+    const base = Math.floor(exp.amount / count);
+    const remainder = exp.amount - base * count;
+    exp.memberIds.forEach(mid => { if (shouldPay[mid] !== undefined) shouldPay[mid] += base; });
+    if (remainder > 0) {
+      // 支払い者を優遇：余りは支払い者以外の先頭メンバーに負担させる
+      const others = exp.memberIds.filter(id => id !== exp.payerId);
+      const target = others.length > 0 ? others[0] : exp.payerId;
+      if (shouldPay[target] !== undefined) shouldPay[target] += remainder;
+    }
+  });
+
+  const balance = {};
+  g.members.forEach(m => { balance[m.id] = paid[m.id] - shouldPay[m.id]; });
+  const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+  const transfers = calcTransfers(g.members, balance);
+
+  let html = `
+    <div class="result-summary">
+      <div class="label">合計金額</div>
+      <div class="big">¥${total.toLocaleString()}</div>
+    </div>
+    <div class="card"><div class="card-label">個人別 内訳</div>
+  `;
+  g.members.forEach(m => {
+    const b = balance[m.id];
+    const cls = b > 0 ? 'surplus' : b < 0 ? 'deficit' : 'even';
+    html += `
+      <div class="result-row">
+        <div class="result-avatar">${m.name[0]}</div>
+        <div class="result-info">
+          <div class="result-name">${m.name}</div>
+          <div class="result-detail">支払済：¥${paid[m.id].toLocaleString()} ／ 負担：¥${shouldPay[m.id].toLocaleString()}</div>
+        </div>
+        <div class="result-amount ${cls}">${b > 0 ? '+' : ''}¥${Math.abs(b).toLocaleString()}</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+
+  if (transfers.length > 0) {
+    html += '<div class="card"><div class="card-label">💸 送金リスト</div>';
+    transfers.forEach(t => {
+      const from = g.members.find(m => m.id === t.from)?.name;
+      const to = g.members.find(m => m.id === t.to)?.name;
+      html += `
+        <div class="transfer-card">
+          <div style="font-size:20px">${from?.[0]}</div>
+          <div class="transfer-arrow">→</div>
+          <div class="transfer-text"><strong>${from}</strong> が <strong>${to}</strong> に送金</div>
+          <div class="transfer-amount">¥${t.amount.toLocaleString()}</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="card" style="text-align:center;color:var(--muted);padding:24px;">✅ 精算不要！全員ぴったりです</div>';
+  }
+  el.innerHTML = html;
+}
+
+function calcTransfers(members, balance) {
+  const transfers = [];
+  const debtors = members.filter(m => balance[m.id] < 0).map(m => ({ id: m.id, amt: -balance[m.id] }));
+  const creditors = members.filter(m => balance[m.id] > 0).map(m => ({ id: m.id, amt: balance[m.id] }));
+  let i = 0, j = 0;
+  while (i < debtors.length && j < creditors.length) {
+    const d = debtors[i], c = creditors[j];
+    const send = Math.min(d.amt, c.amt);
+    if (send > 0) transfers.push({ from: d.id, to: c.id, amount: send });
+    d.amt -= send; c.amt -= send;
+    if (d.amt === 0) i++;
+    if (c.amt === 0) j++;
+  }
+  return transfers;
+}
+
+// ── Modal ──
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ── Init ──
+load();
+renderHome();
+</script>
+
+</body>
+</html>
