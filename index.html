@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -30,174 +29,176 @@
       padding-bottom: env(safe-area-inset-bottom);
     }
 
-```
-/* ── Header ── */
-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 20px 20px 16px;
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; gap: 12px;
-}
-.back-btn {
-  background: none; border: none; color: var(--accent);
-  font-size: 26px; cursor: pointer; padding: 0 4px;
-  display: none; line-height: 1;
-}
-.header-titles { flex: 1; }
-header h1 { font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
-header h2 { font-size: 20px; font-weight: 900; color: var(--text); margin-top: 2px; }
-header h2 span { color: var(--accent); }
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 20px 16px;
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .back-btn {
+      background: none; border: none; color: var(--accent);
+      font-size: 26px; cursor: pointer; padding: 0 4px;
+      display: none; line-height: 1;
+    }
+    .header-titles { flex: 1; }
+    header h1 { font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+    header h2 { font-size: 20px; font-weight: 900; color: var(--text); margin-top: 2px; }
+    header h2 span { color: var(--accent); }
 
-/* ── Nav ── */
-nav {
-  display: none;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 68px; z-index: 99;
-}
-nav.visible { display: flex; }
-nav button {
-  flex: 1; background: none; border: none;
-  color: var(--muted); font-family: inherit;
-  font-size: 13px; font-weight: 700;
-  padding: 12px 8px; cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s; letter-spacing: 0.05em;
-}
-nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+    /* ── Nav ── */
+    nav {
+      display: none;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 68px; z-index: 99;
+    }
+    nav.visible { display: flex; }
+    nav button {
+      flex: 1; background: none; border: none;
+      color: var(--muted); font-family: inherit;
+      font-size: 13px; font-weight: 700;
+      padding: 12px 8px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s; letter-spacing: 0.05em;
+    }
+    nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-/* ── Screens / Pages ── */
-.screen { display: none; }
-.screen.active { display: block; }
-.page { display: none; padding: 20px; padding-bottom: 60px; }
-.page.active { display: block; }
+    /* ── Screens / Pages ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .page { display: none; padding: 20px; padding-bottom: 60px; }
+    .page.active { display: block; }
 
-/* ── Card ── */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
-.card-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
+    /* ── Card ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+    .card-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
 
-/* ── Input ── */
-input[type="text"], input[type="number"], select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 15px;
-  padding: 12px 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
-}
-input:focus, select:focus { border-color: var(--accent); }
-input::placeholder { color: var(--muted); }
+    /* ── Input ── */
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+    input:focus, select:focus { border-color: var(--accent); }
+    input::placeholder { color: var(--muted); }
 
-/* ── Buttons ── */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  background: var(--accent); color: #fff;
-  border: none; border-radius: 10px;
-  font-family: inherit; font-size: 14px; font-weight: 700;
-  padding: 13px 18px; cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-  width: 100%; margin-top: 10px;
-}
-.btn:active { opacity: 0.8; transform: scale(0.98); }
-.btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn.danger { background: #e63946; }
-.btn.small { padding: 7px 12px; font-size: 12px; width: auto; margin-top: 0; }
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 10px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      padding: 13px 18px; cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      width: 100%; margin-top: 10px;
+    }
+    .btn:active { opacity: 0.8; transform: scale(0.98); }
+    .btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn.danger { background: #e63946; }
+    .btn.small { padding: 7px 12px; font-size: 12px; width: auto; margin-top: 0; }
 
-/* ── Group list ── */
-#screen-home { padding: 20px; padding-bottom: 60px; }
-.group-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px;
-  margin-bottom: 12px;
-  display: flex; align-items: center; gap: 14px;
-  cursor: pointer;
-  transition: border-color 0.2s, transform 0.1s;
-  position: relative;
-}
-.group-card:active { transform: scale(0.98); border-color: var(--accent); }
-.group-icon {
-  width: 48px; height: 48px; border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; flex-shrink: 0;
-}
-.group-info { flex: 1; min-width: 0; }
-.group-name { font-size: 16px; font-weight: 900; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.group-meta { font-size: 12px; color: var(--muted); }
-.group-arrow { color: var(--muted); font-size: 20px; margin-right: 8px; }
-.group-delete {
-  background: none; border: none; color: var(--muted);
-  font-size: 16px; cursor: pointer; padding: 6px;
-  flex-shrink: 0;
-}
+    /* ── Group list ── */
+    #screen-home { padding: 20px; padding-bottom: 60px; }
+    .group-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+      position: relative;
+    }
+    .group-card:active { transform: scale(0.98); border-color: var(--accent); }
+    .group-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .group-info { flex: 1; min-width: 0; }
+    .group-name { font-size: 16px; font-weight: 900; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .group-meta { font-size: 12px; color: var(--muted); }
+    .group-arrow { color: var(--muted); font-size: 20px; margin-right: 8px; }
+    .group-edit {
+      background: none; border: none; color: var(--muted);
+      font-size: 16px; cursor: pointer; padding: 6px;
+      flex-shrink: 0;
+    }
+    .group-delete {
+      background: none; border: none; color: var(--muted);
+      font-size: 16px; cursor: pointer; padding: 6px;
+      flex-shrink: 0;
+    }
 
-/* ── Member rows ── */
-.member-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.member-row:last-child { border-bottom: none; }
-.avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; flex-shrink: 0; }
-.member-name { flex: 1; font-size: 15px; font-weight: 700; }
-.delete-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px; }
+    /* ── Member rows ── */
+    .member-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .member-row:last-child { border-bottom: none; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; flex-shrink: 0; }
+    .member-name { flex: 1; font-size: 15px; font-weight: 700; }
+    .delete-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px; }
 
-/* ── Expense rows ── */
-.expense-row { padding: 12px 0; border-bottom: 1px solid var(--border); }
-.expense-row:last-child { border-bottom: none; }
-.expense-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-.expense-name { font-size: 15px; font-weight: 700; }
-.expense-amount { font-family: 'DM Mono', monospace; font-size: 16px; color: var(--accent2); font-weight: 500; }
-.expense-meta { font-size: 12px; color: var(--muted); }
-.expense-actions { display: flex; gap: 6px; margin-top: 8px; }
-.payer-badge { display: inline-block; background: var(--accent2); color: var(--bg); border-radius: 6px; font-size: 11px; font-weight: 700; padding: 2px 7px; margin-left: 6px; }
+    /* ── Expense rows ── */
+    .expense-row { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .expense-row:last-child { border-bottom: none; }
+    .expense-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .expense-name { font-size: 15px; font-weight: 700; }
+    .expense-amount { font-family: 'DM Mono', monospace; font-size: 16px; color: var(--accent2); font-weight: 500; }
+    .expense-meta { font-size: 12px; color: var(--muted); }
+    .expense-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .payer-badge { display: inline-block; background: var(--accent2); color: var(--bg); border-radius: 6px; font-size: 11px; font-weight: 700; padding: 2px 7px; margin-left: 6px; }
 
-/* ── Result ── */
-.result-summary { background: linear-gradient(135deg, var(--accent), #ff8c5a); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; text-align: center; }
-.result-summary .label { font-size: 12px; opacity: 0.8; letter-spacing: 0.1em; margin-bottom: 4px; }
-.result-summary .big { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; }
-.result-row { display: flex; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 12px; }
-.result-row:last-child { border-bottom: none; }
-.result-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; flex-shrink: 0; }
-.result-info { flex: 1; }
-.result-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-.result-detail { font-size: 12px; color: var(--muted); }
-.result-amount { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; text-align: right; }
-.result-amount.surplus { color: #06d6a0; }
-.result-amount.deficit { color: #ef476f; }
-.result-amount.even { color: var(--muted); }
-.transfer-card { background: var(--surface2); border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-.transfer-arrow { color: var(--accent); font-size: 18px; }
-.transfer-text { flex: 1; font-size: 13px; line-height: 1.5; }
-.transfer-amount { font-family: 'DM Mono', monospace; font-size: 15px; color: var(--accent2); }
+    /* ── Result ── */
+    .result-summary { background: linear-gradient(135deg, var(--accent), #ff8c5a); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; text-align: center; }
+    .result-summary .label { font-size: 12px; opacity: 0.8; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .result-summary .big { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; }
+    .result-row { display: flex; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+    .result-row:last-child { border-bottom: none; }
+    .result-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; flex-shrink: 0; }
+    .result-info { flex: 1; }
+    .result-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .result-detail { font-size: 12px; color: var(--muted); }
+    .result-amount { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; text-align: right; }
+    .result-amount.surplus { color: #06d6a0; }
+    .result-amount.deficit { color: #ef476f; }
+    .result-amount.even { color: var(--muted); }
+    .transfer-card { background: var(--surface2); border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .transfer-arrow { color: var(--accent); font-size: 18px; }
+    .transfer-text { flex: 1; font-size: 13px; line-height: 1.5; }
+    .transfer-amount { font-family: 'DM Mono', monospace; font-size: 15px; color: var(--accent2); }
 
-/* ── Modal ── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: flex-end; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: 24px 24px 0 0; padding: 24px 20px 40px; width: 100%; border-top: 1px solid var(--border); animation: slideUp 0.25s ease; max-height: 90dvh; overflow-y: auto; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-title { font-size: 18px; font-weight: 900; margin-bottom: 16px; }
-.modal-row { margin-bottom: 12px; }
-.modal-row label { display: block; font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px; text-transform: uppercase; }
+    /* ── Modal ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: flex-end; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border-radius: 24px 24px 0 0; padding: 24px 20px 40px; width: 100%; border-top: 1px solid var(--border); animation: slideUp 0.25s ease; max-height: 90dvh; overflow-y: auto; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-title { font-size: 18px; font-weight: 900; margin-bottom: 16px; }
+    .modal-row { margin-bottom: 12px; }
+    .modal-row label { display: block; font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 6px; text-transform: uppercase; }
 
-/* ── Checkbox ── */
-.check-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-.check-item input[type="checkbox"] { display: none; }
-.check-item label { display: inline-block; padding: 7px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
-.check-item input:checked + label { background: var(--accent); border-color: var(--accent); color: #fff; }
+    /* ── Checkbox ── */
+    .check-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .check-item input[type="checkbox"] { display: none; }
+    .check-item label { display: inline-block; padding: 7px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+    .check-item input:checked + label { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-.empty-state { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14px; line-height: 1.8; }
-.empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14px; line-height: 1.8; }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
 
-.emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.emoji-btn { background: var(--surface2); border: 2px solid transparent; border-radius: 10px; font-size: 22px; padding: 8px 12px; cursor: pointer; transition: all 0.15s; }
-.emoji-btn.selected { border-color: var(--accent); background: #ff6b3520; }
-```
-
+    .emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .emoji-btn { background: var(--surface2); border: 2px solid transparent; border-radius: 10px; font-size: 22px; padding: 8px 12px; cursor: pointer; transition: all 0.15s; }
+    .emoji-btn.selected { border-color: var(--accent); background: #ff6b3520; }
   </style>
 </head>
 <body>
@@ -217,14 +218,12 @@ input::placeholder { color: var(--muted); }
 </nav>
 
 <!-- HOME -->
-
 <div id="screen-home" class="screen active">
   <button class="btn" style="margin-bottom:20px;" onclick="openNewGroupModal()">＋ 新規グループを作成</button>
   <div id="group-list"></div>
 </div>
 
 <!-- GROUP -->
-
 <div id="screen-group" class="screen">
   <div id="page-members" class="page active">
     <div class="card">
@@ -251,11 +250,10 @@ input::placeholder { color: var(--muted); }
   </div>
 </div>
 
-<!-- MODAL: グループ作成 -->
-
+<!-- MODAL: グループ作成・編集 -->
 <div class="modal-overlay" id="modal-group">
   <div class="modal">
-    <div class="modal-title">グループを作成</div>
+    <div class="modal-title" id="group-modal-title">グループを作成</div>
     <div class="modal-row">
       <label>グループ名</label>
       <input type="text" id="group-name-input" placeholder="例：沖縄旅行2025" maxlength="30" />
@@ -264,13 +262,12 @@ input::placeholder { color: var(--muted); }
       <label>アイコン</label>
       <div class="emoji-grid" id="emoji-grid"></div>
     </div>
-    <button class="btn" onclick="saveNewGroup()">作成する</button>
+    <button class="btn" id="group-modal-save-btn" onclick="saveNewGroup()">作成する</button>
     <button class="btn secondary" onclick="closeModal('modal-group')">キャンセル</button>
   </div>
 </div>
 
 <!-- MODAL: 支出 -->
-
 <div class="modal-overlay" id="modal-expense">
   <div class="modal">
     <div class="modal-title" id="exp-modal-title">支出を追加</div>
@@ -327,7 +324,7 @@ function renderHome() {
           <div class="group-name">${g.name}</div>
           <div class="group-meta">${g.members.length}人 ・ 合計 ¥${total.toLocaleString()}</div>
         </div>
-        <div class="group-arrow">›</div>
+        <button class="group-edit" onclick="openEditGroupModal(event,'${g.id}')">✏️</button>
         <button class="group-delete" onclick="deleteGroup(event,'${g.id}')">✕</button>
       </div>
     `;
@@ -371,13 +368,43 @@ function deleteGroup(e, id) {
 }
 
 // ── New Group ──
+let editingGroupId = null;
+
 function openNewGroupModal() {
+  editingGroupId = null;
   selectedEmoji = EMOJIS[0];
   document.getElementById('group-name-input').value = '';
+  document.getElementById('group-modal-title').textContent = 'グループを作成';
+  document.getElementById('group-modal-save-btn').textContent = '作成する';
+  document.getElementById('group-modal-save-btn').onclick = saveNewGroup;
   document.getElementById('emoji-grid').innerHTML = EMOJIS.map((em, i) =>
     `<button class="emoji-btn${i===0?' selected':''}" onclick="selectEmoji(this,'${em}')">${em}</button>`
   ).join('');
   openModal('modal-group');
+}
+
+function openEditGroupModal(e, id) {
+  e.stopPropagation();
+  editingGroupId = id;
+  const g = appData.groups.find(gr => gr.id === id);
+  selectedEmoji = g.emoji;
+  document.getElementById('group-name-input').value = g.name;
+  document.getElementById('group-modal-title').textContent = 'グループを編集';
+  document.getElementById('group-modal-save-btn').textContent = '保存する';
+  document.getElementById('group-modal-save-btn').onclick = saveEditGroup;
+  document.getElementById('emoji-grid').innerHTML = EMOJIS.map(em =>
+    `<button class="emoji-btn${em===g.emoji?' selected':''}" onclick="selectEmoji(this,'${em}')">${em}</button>`
+  ).join('');
+  openModal('modal-group');
+}
+
+function saveEditGroup() {
+  const name = document.getElementById('group-name-input').value.trim();
+  if (!name) return alert('グループ名を入力してください');
+  const g = appData.groups.find(gr => gr.id === editingGroupId);
+  g.name = name;
+  g.emoji = selectedEmoji;
+  save(); closeModal('modal-group'); renderHome();
 }
 function selectEmoji(btn, em) {
   document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
@@ -586,7 +613,70 @@ function renderResult() {
   } else {
     html += '<div class="card" style="text-align:center;color:var(--muted);padding:24px;">✅ 精算不要！全員ぴったりです</div>';
   }
+
+  // 共有ボタン
+  html += `<button class="btn" style="margin-top:4px;" onclick="shareResult()">
+    <span style="font-size:18px;">📤</span> 共有する
+  </button>`;
+
   el.innerHTML = html;
+}
+
+function buildShareText() {
+  const g = currentGroup();
+  const paid = {}, shouldPay = {};
+  g.members.forEach(m => { paid[m.id] = 0; shouldPay[m.id] = 0; });
+  g.expenses.forEach(exp => {
+    if (paid[exp.payerId] !== undefined) paid[exp.payerId] += exp.amount;
+    const count = exp.memberIds.length;
+    const base = Math.floor(exp.amount / count);
+    const remainder = exp.amount - base * count;
+    exp.memberIds.forEach(mid => { if (shouldPay[mid] !== undefined) shouldPay[mid] += base; });
+    if (remainder > 0) {
+      const others = exp.memberIds.filter(id => id !== exp.payerId);
+      const target = others.length > 0 ? others[0] : exp.payerId;
+      if (shouldPay[target] !== undefined) shouldPay[target] += remainder;
+    }
+  });
+  const balance = {};
+  g.members.forEach(m => { balance[m.id] = paid[m.id] - shouldPay[m.id]; });
+  const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+  const transfers = calcTransfers(g.members, balance);
+
+  let text = `【${g.name}】割り勘精算結果\n`;
+  text += `━━━━━━━━━━\n`;
+  text += `💰 合計：¥${total.toLocaleString()}\n\n`;
+  text += `📋 支出内訳\n`;
+  g.expenses.forEach(exp => {
+    const payer = g.members.find(m => m.id === exp.payerId)?.name;
+    text += `・${exp.name}　¥${exp.amount.toLocaleString()}（${payer}）\n`;
+  });
+  text += `\n💸 送金リスト\n`;
+  if (transfers.length > 0) {
+    transfers.forEach(t => {
+      const from = g.members.find(m => m.id === t.from)?.name;
+      const to = g.members.find(m => m.id === t.to)?.name;
+      text += `・${from} → ${to}　¥${t.amount.toLocaleString()}\n`;
+    });
+  } else {
+    text += `・精算不要！全員ぴったりです✅\n`;
+  }
+  return text;
+}
+
+async function shareResult() {
+  const text = buildShareText();
+  if (navigator.share) {
+    try {
+      await navigator.share({ text });
+    } catch(e) {
+      // キャンセル時は何もしない
+    }
+  } else {
+    // 共有APIが使えない環境はクリップボードにコピー
+    await navigator.clipboard.writeText(text);
+    alert('テキストをコピーしました！');
+  }
 }
 
 function calcTransfers(members, balance) {
@@ -616,6 +706,5 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 load();
 renderHome();
 </script>
-
 </body>
 </html>
