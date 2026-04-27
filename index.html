@@ -284,8 +284,9 @@
       <select id="exp-payer"></select>
     </div>
     <div class="modal-row">
-      <label>割り勘対象メンバー</label>
+      <label>割り勘・立替対象メンバー</label>
       <div class="check-list" id="exp-members"></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">※支払い者が対象外でもOK（立替の場合）</div>
     </div>
     <button class="btn" onclick="saveExpense()">保存する</button>
     <button class="btn secondary" onclick="closeModal('modal-expense')">キャンセル</button>
@@ -550,26 +551,7 @@ function renderResult() {
     return;
   }
 
-  const paid = {}, shouldPay = {};
-  g.members.forEach(m => { paid[m.id] = 0; shouldPay[m.id] = 0; });
-
-  g.expenses.forEach(exp => {
-    if (paid[exp.payerId] !== undefined) paid[exp.payerId] += exp.amount;
-    const count = exp.memberIds.length;
-    const base = Math.floor(exp.amount / count);
-    const remainder = exp.amount - base * count;
-    exp.memberIds.forEach(mid => { if (shouldPay[mid] !== undefined) shouldPay[mid] += base; });
-    if (remainder > 0) {
-      // 支払い者を優遇：余りは支払い者以外の先頭メンバーに負担させる
-      const others = exp.memberIds.filter(id => id !== exp.payerId);
-      const target = others.length > 0 ? others[0] : exp.payerId;
-      if (shouldPay[target] !== undefined) shouldPay[target] += remainder;
-    }
-  });
-
-  const balance = {};
-  g.members.forEach(m => { balance[m.id] = paid[m.id] - shouldPay[m.id]; });
-  const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+  const { paid, shouldPay, balance, total } = calcBalance(g);
   const transfers = calcTransfers(g.members, balance);
 
   let html = `
@@ -622,25 +604,55 @@ function renderResult() {
   el.innerHTML = html;
 }
 
-function buildShareText() {
-  const g = currentGroup();
-  const paid = {}, shouldPay = {};
-  g.members.forEach(m => { paid[m.id] = 0; shouldPay[m.id] = 0; });
+function calcBalance(g) {
+  const paid = {}, shouldPayExact = {}, shouldPay = {};
+  g.members.forEach(m => { paid[m.id] = 0; shouldPayExact[m.id] = 0; shouldPay[m.id] = 0; });
+
   g.expenses.forEach(exp => {
+    // 支払い者が立て替えた金額を記録（対象メンバー外でも可）
     if (paid[exp.payerId] !== undefined) paid[exp.payerId] += exp.amount;
     const count = exp.memberIds.length;
-    const base = Math.floor(exp.amount / count);
-    const remainder = exp.amount - base * count;
-    exp.memberIds.forEach(mid => { if (shouldPay[mid] !== undefined) shouldPay[mid] += base; });
-    if (remainder > 0) {
-      const others = exp.memberIds.filter(id => id !== exp.payerId);
-      const target = others.length > 0 ? others[0] : exp.payerId;
-      if (shouldPay[target] !== undefined) shouldPay[target] += remainder;
-    }
+    exp.memberIds.forEach(mid => {
+      if (shouldPayExact[mid] !== undefined) shouldPayExact[mid] += exp.amount / count;
+    });
   });
+
+  // 各支出の合計が正しく集計されているか確認するため支出単位で端数処理
+  // 全支出の合計に対して一括で端数処理
+  const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+  g.members.forEach(m => { shouldPay[m.id] = Math.floor(shouldPayExact[m.id]); });
+
+  const sumFloor = g.members.reduce((s, m) => s + shouldPay[m.id], 0);
+  let remainder = total - sumFloor;
+
+  // 端数は支払い者（立て替え者）を優遇：支払い者以外から先に+1円
+  const payerIds = [...new Set(g.expenses.map(e => e.payerId))];
+  const sorted = [...g.members].sort((a, b) => {
+    const aIsPayer = payerIds.includes(a.id) ? 1 : 0;
+    const bIsPayer = payerIds.includes(b.id) ? 1 : 0;
+    return aIsPayer - bIsPayer;
+  });
+  for (const m of sorted) {
+    if (remainder <= 0) break;
+    // 対象メンバーに含まれている人にだけ端数を負担させる
+    const isTarget = g.expenses.some(e => e.memberIds.includes(m.id));
+    if (isTarget) { shouldPay[m.id] += 1; remainder -= 1; }
+  }
+  // まだ余りがある場合は誰でもよいので残りを割り当て
+  for (const m of sorted) {
+    if (remainder <= 0) break;
+    shouldPay[m.id] += 1;
+    remainder -= 1;
+  }
+
   const balance = {};
   g.members.forEach(m => { balance[m.id] = paid[m.id] - shouldPay[m.id]; });
-  const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+  return { paid, shouldPay, balance, total };
+}
+
+function buildShareText() {
+  const g = currentGroup();
+  const { paid, shouldPay, balance, total } = calcBalance(g);
   const transfers = calcTransfers(g.members, balance);
 
   let text = `【${g.name}】割り勘精算結果\n`;
